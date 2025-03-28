@@ -66,8 +66,8 @@ public class DroneServer {
                         response = handleLoadMapFile(body.toString());
                     } else if (path.equals("/load-map") && method.equals("POST")) {
                         response = handleLoadMap(body.toString());
-                    } else if (path.startsWith("/run-algorithm") && method.equals("GET")) {
-                        response = handleRunAlgorithm(path);
+                    } else if (path.equals("/run-algorithm") && method.equals("POST")) {
+                        response = handleRunAlgorithm(body.toString());
                     } else if (path.equals("/list-maps") && method.equals("GET")) {
                         response = handleListMaps();
                     } else if (path.equals("/upload-map") && method.equals("POST")) {
@@ -181,12 +181,14 @@ public class DroneServer {
         }
     }
 
-    private static String handleRunAlgorithm(String path) {
+    private static String handleRunAlgorithm(String body) {
         try {
-            // Parsear parámetros de la URL
-            Map<String, String> queryParams = parseQueryParams(path);
-            String algorithm = queryParams.get("algorithm");
-            String mapData = queryParams.get("map");
+            // Parsear el cuerpo JSON
+            Gson gson = new Gson();
+            Map<String, String> requestData = gson.fromJson(body, Map.class);
+
+            String algorithm = requestData.get("algorithm");
+            String mapData = requestData.get("map");
 
             if (algorithm == null || mapData == null) {
                 return buildErrorResponse("Parámetros algorithm y map son requeridos", 400);
@@ -222,8 +224,7 @@ public class DroneServer {
 
             long executionTime = System.currentTimeMillis() - startTime;
 
-            // Calcular métricas (simplificado - en una implementación real deberías
-            // rastrear estos valores)
+            // Calcular métricas
             int nodesExpanded = (int) (pathResult.size() * 1.5); // Estimación
             int depth = pathResult.size();
             int cost = calculatePathCost(pathResult, matrix);
@@ -236,27 +237,12 @@ public class DroneServer {
                     executionTime,
                     cost);
 
-            // Convertir a JSON
-            Gson gson = new Gson();
             return buildResponse(gson.toJson(result), "application/json");
 
         } catch (Exception e) {
+            e.printStackTrace();
             return buildErrorResponse("Error al ejecutar el algoritmo: " + e.getMessage(), 500);
         }
-    }
-
-    private static Map<String, String> parseQueryParams(String path) {
-        Map<String, String> params = new HashMap<>();
-        if (path.contains("?")) {
-            String query = path.split("\\?")[1];
-            for (String pair : query.split("&")) {
-                String[] keyValue = pair.split("=");
-                if (keyValue.length == 2) {
-                    params.put(keyValue[0], keyValue[1]);
-                }
-            }
-        }
-        return params;
     }
 
     private static LinkedList<LinkedList<Integer>> parseMapData(String mapData) {
@@ -264,13 +250,12 @@ public class DroneServer {
         String[] rows = mapData.split("\n");
         for (String row : rows) {
             LinkedList<Integer> rowList = new LinkedList<>();
-            String[] cells = row.trim().split("\n\n");
+            String[] cells = row.trim().split("\\s+");
             for (String cell : cells) {
                 rowList.add(Integer.parseInt(cell));
             }
             matrix.add(rowList);
         }
-
         return matrix;
     }
 

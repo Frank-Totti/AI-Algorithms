@@ -301,7 +301,6 @@ function updateAlgorithmOptions() {
     algorithmSelect.disabled = algorithmTypeSelect.value === '';
     runBtn.disabled = algorithmSelect.value === '';
 }
-
 async function runAlgorithm() {
     const algorithm = algorithmSelect.value;
     if (!algorithm) return;
@@ -312,15 +311,20 @@ async function runAlgorithm() {
     runBtn.textContent = "Ejecutando...";
     
     try {
-        const queryParams = new URLSearchParams();
-        queryParams.append('algorithm', algorithm);
-        queryParams.append('map', currentMap.map(row => row.join(' ')).join('\n'));
+        // Construir el cuerpo de la solicitud como JSON
+        const requestData = {
+            algorithm: algorithm,
+            map: currentMap.map(row => row.join(' ')).join('\n')
+        };
         
-        const response = await fetch(`http://localhost:8080/run-algorithm?${queryParams.toString()}`, {
+        const response = await fetch(`http://localhost:8080/run-algorithm`, {
             mode: 'cors',
+            method: 'POST',
             headers: {
+                'Content-Type': 'application/json',
                 'Accept': 'application/json'
-            }
+            },
+            body: JSON.stringify(requestData)
         });
         
         if (!response.ok) {
@@ -334,17 +338,7 @@ async function runAlgorithm() {
             throw new Error("El servidor no devolvió un camino válido");
         }
         
-        // Asegurarse de que los datos tengan el formato esperado
-        const processedData = {
-            algorithm: algorithm,
-            path: data.path,
-            nodesExpanded: data.nodesExpanded || 0,
-            depth: data.depth || 0,
-            time: `${data.executionTime || 0} ms`,
-            cost: data.cost || 0
-        };
-        
-        processResults(processedData);
+        processResults(data);
     } catch (error) {
         console.error("Error detallado:", error);
         showNotification("Error al ejecutar el algoritmo: " + error.message, "error");
