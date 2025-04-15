@@ -1,7 +1,7 @@
 import java.util.*;
 import java.util.stream.*;
 
-// 0 -> casilla libre ; 1 -> obstaculo ; 2 -> punto inicio del dron ; 3 -> campo electromagnetico ; 4 -> paquete
+// 0 -> casilla libre ; 2 -> punto inicio del dron ; 3 -> campo electromagnetico ; 4 -> paquete
 
 public class algorithms{
 
@@ -1124,11 +1124,11 @@ public class algorithms{
 
         LinkedList<LinkedList<Integer>> map = new LinkedList<>();
 
-        map.add(new LinkedList<>(Arrays.asList(0, 2, 0, 0, 0)));
-        map.add(new LinkedList<>(Arrays.asList(0, 1, 1, 1, 1)));
-        map.add(new LinkedList<>(Arrays.asList(0, 0, 0, 0, 4)));
-        map.add(new LinkedList<>(Arrays.asList(0, 1, 1, 1, 3)));
-        map.add(new LinkedList<>(Arrays.asList(0, 0, 0, 0, 4)));
+        map.add(new LinkedList<>(Arrays.asList(1, 0, 0, 0)));
+        map.add(new LinkedList<>(Arrays.asList(1, 0, 1, 4)));
+        map.add(new LinkedList<>(Arrays.asList(0, 2, 0, 3)));
+        map.add(new LinkedList<>(Arrays.asList(4, 1, 1, 1)));
+        // map.add(new LinkedList<>(Arrays.asList(0, 0, 0, 0, 4)));
 
         LinkedList<String> operators = new LinkedList<>();
 
