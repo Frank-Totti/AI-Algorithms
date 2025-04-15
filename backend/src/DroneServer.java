@@ -162,11 +162,14 @@ public class DroneServer {
             if (body == null || body.trim().isEmpty()) {
                 return buildErrorResponse("El contenido del mapa no puede estar vacío", 400);
             }
+            String[] rows = body.split("\n");
+            /*
 
             String[] rows = body.split("\n");
             if (rows.length != 10) {
                 return buildErrorResponse("El mapa debe tener exactamente 10 filas", 400);
             }
+            */
 
             for (int i = 0; i < rows.length; i++) {
                 String row = rows[i].trim();
