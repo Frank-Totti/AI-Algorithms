@@ -1,0 +1,7 @@
+{
+    "java.project.referencedLibraries": [
+        "backend/lib/gson-2.8.9.jar"
+    ],
+    "java.project.sourcePaths": ["backend/src"],
+    "java.project.outputPath": "backend/out"
+}

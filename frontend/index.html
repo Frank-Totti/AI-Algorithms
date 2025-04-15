@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Drone - Búsqueda de Paquetes</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Smart Drone - Búsqueda de Paquetes</h1>
+        
+        <div class="panel">
+            <div class="map-container">
+                <h2 class="section-title">Mapa del Ambiente</h2>
+                <div class="grid" id="grid"></div>
+            </div>
+            
+            <div class="controls">
+                <div class="controls-section">
+                    <h2 class="section-title">Cargar Mapa</h2>
+                    <div class="tabs">
+                        <button class="tab-button active" data-tab="text-tab">Ingresar Texto</button>
+                        <button class="tab-button" data-tab="file-tab">Cargar Archivo</button>
+                    </div>
+                    
+                    <div id="text-tab" class="tab-content active">
+                        <textarea id="map-data" rows="10" placeholder="Pega aquí la matriz del mapa (10x10)..."></textarea>
+                        <button id="load-btn">Cargar Mapa</button>
+                    </div>
+                    
+                    <div id="file-tab" class="tab-content">
+                        <select id="map-files">
+                            <option value="">Selecciona un archivo</option>
+                        </select>
+                        <button id="load-file-btn">Cargar Archivo</button>
+                        <div class="file-upload">
+                            <label for="upload-file">O sube tu propio archivo:</label>
+                            <input type="file" id="upload-file" accept=".txt">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="controls-section">
+                    <h2 class="section-title">Seleccionar Algoritmo</h2>
+                    <select id="algorithm-type">
+                        <option value="">-- Selecciona tipo de búsqueda --</option>
+                        <option value="uninformed">No informada</option>
+                        <option value="informed">Informada</option>
+                    </select>
+                    
+                    <select id="algorithm" disabled>
+                        <option value="">-- Selecciona algoritmo --</option>
+                    </select>
+                    
+                    <button id="run-btn" disabled>Ejecutar Algoritmo</button>
+                </div>
+                
+                <div class="controls-section results" id="results">
+                    <h2 class="section-title">Resultados</h2>
+                    <p id="initial-message">Selecciona y ejecuta un algoritmo para ver los resultados.</p>
+                    <div id="results-content" style="display: none;">
+                        <div class="stats" id="stats"></div>
+                        <div class="path-display">
+                            <h3>Camino encontrado:</h3>
+                            <div id="path-display"></div>
+                        </div>
+                        <div class="animation-controls">
+                            <button id="animate-btn">Ver Animación</button>
+                            <button id="stop-btn" disabled>Detener</button>
+                            <div class="speed-control">
+                                <label for="speed">Velocidad:</label>
+                                <input type="range" id="speed" min="100" max="2000" value="500">
+                                <span id="speed-value">500 ms</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
