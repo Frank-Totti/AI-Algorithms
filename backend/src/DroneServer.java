@@ -4,6 +4,7 @@ import java.util.*;
 import java.nio.file.*;
 import java.nio.charset.StandardCharsets;
 import com.google.gson.Gson;
+import org.json.JSONObject;
 
 public class DroneServer {
     private static final int PORT = 8080;
@@ -63,7 +64,9 @@ public class DroneServer {
                     // Procesar la solicitud
                     String response;
                     if (path.equals("/load-map-file") && method.equals("POST")) {
-                        response = handleLoadMapFile(body.toString());
+                        JSONObject json = new JSONObject(body.toString());
+                        String filename = json.getString("filename");
+                        response = handleLoadMapFile(filename);
                     } else if (path.equals("/load-map") && method.equals("POST")) {
                         response = handleLoadMap(body.toString());
                     } else if (path.equals("/run-algorithm") && method.equals("POST")) {
@@ -113,9 +116,9 @@ public class DroneServer {
                 "{\"error\":\"" + errorMessage + "\"}";
     }
 
-    private static String handleLoadMapFile(String path) {
+    private static String handleLoadMapFile(String filename) {
         try {
-            Path filePath = Paths.get(MAPS_DIR + path.trim());
+            Path filePath = Paths.get(MAPS_DIR, filename);
             if (!Files.exists(filePath)) {
                 return buildErrorResponse("Archivo no encontrado", 404);
             }
@@ -129,7 +132,7 @@ public class DroneServer {
 
     private static String handleUploadMap(String body) {
         try {
-            String filename = "mapa_" + System.currentTimeMillis() + ".txt";
+            String filename = "mapa_" + getNextMapNumber() + ".txt";
             Path filePath = Paths.get(MAPS_DIR + filename);
             Files.write(filePath, body.getBytes(StandardCharsets.UTF_8));
 
@@ -139,6 +142,33 @@ public class DroneServer {
         }
     }
 
+    private static int getNextMapNumber() throws IOException {
+        File dir = new File(MAPS_DIR);
+        if (!dir.exists()) {
+            dir.mkdirs(); // Asegura que el directorio exista
+        }
+    
+        File[] files = dir.listFiles((d, name) -> name.matches("mapa_\\d+\\.txt"));
+        int max = 0;
+    
+        if (files != null) {
+            for (File file : files) {
+                String name = file.getName();
+                String numberPart = name.replaceAll("\\D+", "");
+                try {
+                    int number = Integer.parseInt(numberPart);
+                    if (number > max) {
+                        max = number;
+                    }
+                } catch (NumberFormatException ignored) {
+                    // Ignorar archivos mal nombrados
+                }
+            }
+        }
+    
+        return max + 1;
+    }
+    
     private static String handleListMaps() {
         try {
             File mapsDir = new File(MAPS_DIR);

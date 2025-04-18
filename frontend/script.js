@@ -126,10 +126,14 @@ function loadMapFromFile() {
         showNotification('Por favor selecciona un archivo', 'error');
         return;
     }
-    
-    fetch(`http://localhost:8080/load-map-file?filename=${encodeURIComponent(filename)}`, {
+
+    fetch('http://localhost:8080/load-map-file', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ filename }), // Enviamos el nombre del archivo en el body
         mode: 'cors'
-        
     })
     .then(response => {
         if (!response.ok) {
@@ -269,8 +273,14 @@ function renderGrid(highlightPosition = null) {
             
             switch(currentMap[i][j]) {
                 case 0: cell.textContent = ''; break;
-                case 1: cell.textContent = '■'; break;
-                case 2: cell.textContent = '✈'; break;
+                case 1: cell.textContent = ''; break;
+                case 2:
+                    const droneImg = document.createElement('img');
+                    droneImg.src = './assets/drone.png';
+                    droneImg.alt = "Drone";
+                    droneImg.classList.add('drone-image');
+                    cell.appendChild(droneImg)
+                    break;
                 case 3: cell.textContent = '⚡'; break;
                 case 4: cell.textContent = '📦'; break;
                 default: cell.textContent = '?'; // Para valores inválidos
