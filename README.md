@@ -2,10 +2,9 @@
 
 Este repo tiene 5 algoritmos de busqueda informada y no informada para el desarrollo de un problema
 
-build poner eso:
+## 🏁 Cómo ejecutar el proyecto
 
-javac -cp ".;./backend/lib/gson-2.8.9.jar" backend/src/DroneServer.java backend/src/algorithms.java -d backend/bin
+### Windows
+1. Haz doble clic en `run.bat`.
 
-run poner eso:
-
-java -cp ".;./backend/bin;./backend/lib/gson-2.8.9.jar" DroneServer
+El servidor se iniciará y el navegador abrirá `index.html`.
