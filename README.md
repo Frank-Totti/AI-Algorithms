@@ -1,10 +1,15 @@
 # AI-Algorithms
 
-Este repo tiene 5 algoritmos de busqueda informada y no informada para el desarrollo de un problema
+Este repositorio contiene 5 algoritmos de búsqueda informada y no informada para la resolución de un problema.
 
 ## 🏁 Cómo ejecutar el proyecto
 
-### Windows
+### 🪟 Windows
 1. Haz doble clic en `run.bat`.
 
-El servidor se iniciará y el navegador abrirá `index.html`.
+Esto compilará el backend, iniciará el servidor y abrirá automáticamente `index.html` en tu navegador.
+
+### 🐧 Linux
+1. Haz doble clic en `run.sh`, o ejecútalo desde la terminal con:
+   ```bash
+   ./run.sh
