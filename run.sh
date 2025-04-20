@@ -18,5 +18,4 @@ java -cp "backend/lib/*:backend/out" DroneServer &
 
 xdg-open frontend/index.html
 
-echo "¡Todo listo! Servidor iniciado y frontend abierto 🚀"
 
